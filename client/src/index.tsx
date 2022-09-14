@@ -8,6 +8,7 @@ import { BrowserRouter } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import { CustomRouter } from "./features/utils/CustomerRouter";
 import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom";
+import { StoreProvider } from "./app/context/StoreContext";
 
 export const history = createBrowserHistory();
 
@@ -17,7 +18,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <HistoryRouter history={history}>
-      <App />
+      <StoreProvider>
+        <App />
+      </StoreProvider>
     </HistoryRouter>
   </React.StrictMode>
 );
