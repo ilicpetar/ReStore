@@ -9,6 +9,11 @@ import { createBrowserHistory } from "history";
 import { CustomRouter } from "./features/utils/CustomerRouter";
 import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom";
 import { StoreProvider } from "./app/context/StoreContext";
+// import { configureStore } from "./app/store/configureStore";
+import { Provider } from "react-redux";
+import { store } from "./app/store/configureStore";
+
+// const store = configureStore();
 
 export const history = createBrowserHistory();
 
@@ -18,9 +23,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <HistoryRouter history={history}>
-      <StoreProvider>
+      <Provider store={store}>
         <App />
-      </StoreProvider>
+      </Provider>
     </HistoryRouter>
   </React.StrictMode>
 );

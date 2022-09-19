@@ -1,5 +1,6 @@
 using API.Data;
 using API.Middleware;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,9 @@ opt.AddPolicy("CorsPolicy", policy =>
     policy.AllowAnyMethod().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:3000");
 })
 );
+
+//builder.Services.AddScoped<ValidationFilterAttribute>();
+//builder.Services.Configure<ApiBehaviorOptions>(options=> options.SuppressModelStateInvalidFilter = true);
 
 var app = builder.Build();
 
