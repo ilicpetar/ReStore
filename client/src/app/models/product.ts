@@ -5,6 +5,15 @@ export interface Product {
     price: number;
     pictureUrl: string;
     type?: string;
-    brand: string;
+    brand?: string;
     quantityInStock?: number;
+}
+
+export interface ProductParams {
+    orderBy:string;
+    searchTerm?:string;
+    types:string[];
+    brands:string[];
+    pageNumber:number;
+    pageSize:number;
 }
