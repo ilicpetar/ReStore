@@ -5,7 +5,7 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import AboutPage from "../../features/about/AboutPage";
@@ -24,25 +24,33 @@ import agent from "../api/agent";
 import LoadingComponent from "./LoadingComponent";
 import Checkout from "../../features/checkout/Checkout";
 import { useAppDispatch } from "../store/configureStore";
-import { setBasket } from "../../features/basket/basketSlice";
+import { fetchBasketAsync, setBasket } from "../../features/basket/basketSlice";
+import Register from "../../features/account/Register";
+import Login from "../../features/account/Login";
+import { fetchCurrentUser } from "../../features/account/accountSlice";
+import CheckoutPage from "../../features/checkout/CheckoutPage";
+import Orders from "../../features/orders/Orders";
 
 function App() {
   // const { setBasket } = useStoreContext();
-const dispatch =useAppDispatch();
+  const dispatch = useAppDispatch();
 
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const buyerId = getCookie("buyerId");
-    if (buyerId) {
-      agent.Basket.get()
-        .then((basket) => dispatch(setBasket(basket)))
-        .catch((error) => console.log(error))
-        .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
+  const initApp = useCallback(async () => {
+    try {
+      dispatch(fetchCurrentUser());
+      dispatch(fetchBasketAsync());
+    } catch (error) {
+      console.log(error);
     }
-  }, [setBasket]);
+  }, [dispatch]);
+
+  useEffect(() => {
+    initApp().then(() => {
+      setLoading(false);
+    });
+  }, [initApp]);
 
   const [darkMode, setDarkMode] = useState(false);
   const paletteType = darkMode ? "dark" : "light";
@@ -75,7 +83,10 @@ const dispatch =useAppDispatch();
           <Route path="contact" element={<ContactPage />} />
           <Route path="server-error" element={<ServerError />} />
           <Route path="basket" element={<BasketPage />} />
-          <Route path="checkout" element={<Checkout />} />
+          <Route path="checkout" element={<CheckoutPage />} />
+          <Route path="orders" element={<Orders />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Container>
