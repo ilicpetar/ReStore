@@ -30,6 +30,9 @@ import Login from "../../features/account/Login";
 import { fetchCurrentUser } from "../../features/account/accountSlice";
 import CheckoutPage from "../../features/checkout/CheckoutPage";
 import Orders from "../../features/orders/Orders";
+import Inventory from "../../features/admin/Inventory";
+
+
 
 function App() {
   // const { setBasket } = useStoreContext();
@@ -74,7 +77,32 @@ function App() {
       <ToastContainer position="bottom-right" hideProgressBar />
       <CssBaseline />
       <Header darkMode={darkMode} handleThemeChange={handleThemeChange} />
-      <Container>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route
+          path={"*"}
+          element={
+            <Container sx={{ mt: 4 }}>
+              {/* <Route path="/" element={<HomePage />} /> */}
+              <Routes>
+                <Route path="catalog" element={<Catalog />} />
+                <Route path="catalog/:id" element={<ProductDetails />} />
+                <Route path="about" element={<AboutPage />} />
+                <Route path="contact" element={<ContactPage />} />
+                <Route path="server-error" element={<ServerError />} />
+                <Route path="basket" element={<BasketPage />} />
+                <Route path="checkout" element={<CheckoutPage />} />
+                <Route path="orders" element={<Orders />} />
+                <Route path="inventory" element={<Inventory />} />
+                <Route path="login" element={<Login />} />
+                <Route path="register" element={<Register />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Container>
+          }
+        />
+      </Routes>
+      {/* <Container>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="catalog" element={<Catalog />} />
@@ -89,7 +117,7 @@ function App() {
           <Route path="register" element={<Register />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </Container>
+      </Container> */}
     </ThemeProvider>
   );
 }

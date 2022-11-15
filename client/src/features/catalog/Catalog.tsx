@@ -16,6 +16,7 @@ import agent from "../../app/api/agent";
 import AppPagination from "../../app/components/AppPagination";
 import CheckboxButtons from "../../app/components/CheckboxButtons";
 import RadioButtonGroup from "../../app/components/RadioButtonGroup";
+import useProducts from "../../app/hooks/useProducts";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { Product } from "../../app/models/product";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
@@ -39,25 +40,9 @@ function Catalog() {
   // const [products, setProducts] = useState<Product[]>([]);
   // const [loading, setLoading] = useState(true);
 
-  const products = useAppSelector(productSelectors.selectAll);
-  const {
-    productsLoaded,
-    status,
-    filtersLoaded,
-    brands,
-    types,
-    productParams,
-    metaData,
-  } = useAppSelector((state) => state.catalog);
+  const { products, brands, types, filtersLoaded, metaData } = useProducts();
+  const { productParams } = useAppSelector((state) => state.catalog);
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (!productsLoaded) dispatch(fetchProductsAsync());
-  }, [productsLoaded, dispatch]);
-
-  useEffect(() => {
-    if (!filtersLoaded) dispatch(fetchFilters());
-  }, [filtersLoaded, dispatch]);
 
   if (!filtersLoaded)
     return <LoadingComponent message="Loading products ..." />;
@@ -102,13 +87,15 @@ function Catalog() {
         <ProductList products={products} />
       </Grid>
       <Grid item xs={3} />
-      <Grid item xs={9} sx={{mb:2}}>
-       {metaData && <AppPagination
-          metaData={metaData!}
-          onPageChange={(page: number) =>
-            dispatch(setPageNumber({ pageNumber: page }))
-          }
-        />}
+      <Grid item xs={9} sx={{ mb: 2 }}>
+        {metaData && (
+          <AppPagination
+            metaData={metaData!}
+            onPageChange={(page: number) =>
+              dispatch(setPageNumber({ pageNumber: page }))
+            }
+          />
+        )}
       </Grid>
     </Grid>
   );
